@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/EZ.Redact.Lgpd.MongoDb.SampleApi/EZ.Redact.Lgpd.MongoDb.SampleApi.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/EZ.Redact.Lgpd.MongoDb/EZ.Redact.Lgpd.MongoDb.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EZ.Redact.Lgpd.MongoDb.UnitTests/EZ.Redact.Lgpd.MongoDb.UnitTests.csproj" />
+  </Folder>
+</Solution>

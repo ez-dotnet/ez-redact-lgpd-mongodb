@@ -1,0 +1,24 @@
+name: Publish NuGet Package
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+      - run: dotnet restore
+      - run: dotnet test -c Release --no-restore
+      - name: Pack
+        run: |
+          VERSION=$(echo ${{ github.ref_name }} | sed 's/v//')
+          dotnet pack -c Release /p:Version=$VERSION --no-restore --output nupkg
+      - name: Publish to NuGet
+        run: dotnet nuget push nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
