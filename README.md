@@ -22,12 +22,25 @@ Registre os serviços no DI:
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.EnableRedaction(options => options.ApplyDiscriminator = false);
 builder.Services.AddLGPDRedaction()
                 .AddMongoDbRedaction();
 ```
 
 > `AddMongoDbRedaction()` registra o suporte a redação em queries MongoDB.
+
+## Exemplo rápido
+
+```csharp
+using EZ.Redact.Lgpd.MongoDb;
+
+var collection = db.GetCollection<Cliente>("clientes");
+var comRedacao = await collection
+    .UseRedaction()
+    .Find(c => c.Ativo)
+    .ToListAsync();
+```
+
+> Todos os dados sensíveis decorados com atributos LGPD serão redigidos automaticamente nos documentos retornados.
 
 ## Configuração
 
@@ -41,6 +54,13 @@ Refere-se às opções do pacote [EZ.Redact.Lgpd.Core](https://github.com/ez-dot
 | `HmacKeyId` | `1` | Identificador da chave para rotação |
 | `HmacFor` | `HashSet<>` vazio | Tipos de dado que devem usar HMAC em vez de masking |
 
+### `GuidOptions`
+
+| Propriedade | Padrão | Descrição |
+| :--- | :--- | :--- |
+| `PrefixHexCount` | `4` | Quantidade de hex digits preservados no prefixo |
+| `SuffixHexCount` | `4` | Quantidade de hex digits preservados no sufixo |
+
 ### Três formas de configurar
 
 **1. Em código (`Action<LGPDRedactOptions>`)**
@@ -48,6 +68,7 @@ Refere-se às opções do pacote [EZ.Redact.Lgpd.Core](https://github.com/ez-dot
 builder.Services.AddLGPDRedaction(options =>
 {
     options.MaskChar = '#';
+    options.Guid.PrefixHexCount = 6;
     options.HmacKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     options.HmacFor.Add(DadoPessoal.CPF);
 });
@@ -262,6 +283,17 @@ Um projeto de exemplo na pasta `samples/`:
 dotnet run --project samples/EZ.Redact.Lgpd.MongoDb.SampleApi
 curl http://localhost:5000/clientes | jq
 ```
+
+---
+
+## Projetos Relacionados
+
+| Projeto | Descrição |
+| :--- | :--- |
+| [EZ.Redact.Lgpd.Core](https://github.com/ez-dotnet/ez-redact-lgpd-core) | Biblioteca base de redação de dados sensíveis LGPD |
+| [EZ.Redact.Lgpd.EntityFramework](https://github.com/ez-dotnet/ez-redact-lgpd-entityframework) | Extensão para redação de dados em consultas Entity Framework |
+| [EZ.Redact.Lgpd.Json](https://github.com/ez-dotnet/ez-redact-lgpd-json) | Extensão para redação de dados em serialização JSON |
+| [EZ.Redact.Lgpd.Xml](https://github.com/ez-dotnet/ez-redact-lgpd-xml) | Extensão para redação de dados em serialização XML |
 
 ---
 
