@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Gabriel Albuquerque</Authors>
+    <Title>EZ Redact Lgpd MongoDB</Title>
+    <Description>Redação de dados sensíveis (LGPD) durante leitura de documentos no MongoDB.</Description>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <Version>1.0.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>lgpd;redact;pii;data-privacy;compliance;brazil;mongodb;cpf;cnpj</PackageTags>
+    <RepositoryUrl>https://github.com/ez-dotnet/ez-redact-lgpd-mongodb</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/ez-dotnet/ez-redact-lgpd-mongodb</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>
