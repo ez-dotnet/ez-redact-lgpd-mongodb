@@ -3,6 +3,10 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão do pacote (ex: 2.0.0)'
+        required: true
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -14,11 +18,13 @@ jobs:
             8.0.x
             9.0.x
             10.0.x
+      - run: dotnet nuget locals all --clear
       - run: dotnet restore
       - run: dotnet test -c Release --no-restore
       - name: Pack
         run: |
-          VERSION=$(echo ${{ github.ref_name }} | sed 's/v//')
+          VERSION=${{ github.event.inputs.version || github.ref_name }}
+          VERSION=$(echo $VERSION | sed 's/v//')
           dotnet pack -c Release /p:Version=$VERSION --no-restore --output nupkg
       - name: Publish to NuGet
         run: dotnet nuget push nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
